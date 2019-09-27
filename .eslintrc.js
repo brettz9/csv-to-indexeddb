@@ -44,8 +44,24 @@ module.exports = {
     },
     {
       files: ["test/**"],
+      globals: {
+        "expect": true
+      },
+      plugins: [
+        "chai-friendly",
+        "chai-expect"
+      ],
+      env: {
+        "mocha": true
+      },
       rules: {
-        "no-console": ["off"]
+        "no-console": ["off"],
+        "chai-expect/no-inner-compare": 2,
+        "chai-expect/missing-assertion": 2,
+        "chai-expect/terminating-properties": 2,
+        // For eslint-plugin-chai-friendly
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2
       }
     }
   ],

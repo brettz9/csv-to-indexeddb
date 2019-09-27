@@ -2,3 +2,5 @@ test
 lgtm.yml
 ignore
 rollup.config.js
+.nyc_output
+coverage

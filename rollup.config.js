@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import istanbul from 'rollup-plugin-istanbul';
 
 /**
  * @external RollupConfig
@@ -17,6 +18,9 @@ export default [{
     exports: 'named'
   },
   plugins: [
+    istanbul({
+      exclude: ['test/**/*.js', 'dist/**']
+    }),
     resolve(),
     commonjs()
   ]
@@ -29,6 +33,9 @@ export default [{
     exports: 'named'
   },
   plugins: [
+    istanbul({
+      exclude: ['test/**/*.js', 'dist/**']
+    }),
     resolve(),
     commonjs()
   ]
