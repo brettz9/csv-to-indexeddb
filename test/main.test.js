@@ -1,4 +1,4 @@
-import {importCSVToIndexedDB} from '../dist/csv-to-indexeddb-es.js';
+import {importCSVToIndexedDB} from '../src/index.js';
 
 describe('Main tests', function () {
   it('API', function () {
