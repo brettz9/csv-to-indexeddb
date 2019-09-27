@@ -54,6 +54,10 @@ function importJSONToIndexedDB ({
       // eslint-disable-next-line no-console
       console.log('IndexedDB.open error', err);
     });
+    req.addEventListener('blocked', (err) => {
+      // eslint-disable-next-line no-console
+      console.log('IndexedDB.open blocked', err);
+    });
     /* eslint-enable promise/prefer-await-to-callbacks */
   });
 }
