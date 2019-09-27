@@ -1,0 +1,65 @@
+{
+  "name": "csv-to-indexeddb",
+  "version": "0.1.0",
+  "description": "Converts CSV or JSON to IndexedDB",
+  "main": "dist/csv-to-indexeddb.js",
+  "module": "dist/csv-to-indexeddb-es.js",
+  "scripts": {
+    "eslint": "eslint --ext js,md,html .",
+    "rollup": "rollup -c",
+    "nyc": "nyc --reporter=text mocha",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brettz9/csv-to-indexeddb.git"
+  },
+  "browserslist": [
+    "cover 100%"
+  ],
+  "keywords": [
+    "indexeddb",
+    "csv",
+    "import"
+  ],
+  "author": "Brett Zamir <brettz9@yahoo.com>",
+  "contributors": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brettz9/csv-to-indexeddb/issues"
+  },
+  "homepage": "https://github.com/brettz9/csv-to-indexeddb#readme",
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.10"
+  },
+  "devDependencies": {
+    "@mysticatea/eslint-plugin": "^12.0.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.4.0",
+    "eslint-config-ash-nazg": "^10.0.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-array-func": "^3.1.3",
+    "eslint-plugin-compat": "^3.3.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsdoc": "^15.9.4",
+    "eslint-plugin-markdown": "^1.0.0",
+    "eslint-plugin-no-use-extend-native": "^0.4.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-sonarjs": "^0.4.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-unicorn": "^12.0.1",
+    "indexeddbshim": "^4.1.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rollup": "^1.21.4",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^3.6.3"
+  }
+}
