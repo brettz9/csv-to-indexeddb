@@ -3,8 +3,22 @@
 
 import csv from 'csvtojson';
 
-// eslint-disable-next-line jsdoc/require-jsdoc
-function importJSON ({
+// Todo: Add docs for other properties
+/**
+ * @param {PlainObject} cfg
+ * @param {Array} cfg.fieldNames
+ * @param {Array} [cfg.fieldSchemas=[]] E.g.,
+ *   `{type: 'string'}, {type: 'integer'}`
+ *   Can omit or pass null to default to average type in column
+ * @param {string} cfg.dbName, // 'myDb'
+ * @param {string} cfg.storeName, // 'myRecords'
+ * @param {Array} [cfg.indexes=[]]
+ * @param {string|Array} cfg.keyPath
+ * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use; defaults to
+ *   `window.indexedDB` or `global.indexedDB`
+ * @returns {Promise<void>}
+*/
+function importJSONToIndexedDB ({
   // eslint-disable-next-line no-shadow
   indexedDB = typeof window !== 'undefined'
     ? window.indexedDB
@@ -49,7 +63,6 @@ function importJSON ({
 * @see https://www.npmjs.com/package/csvtojson#user-content-parameters
 */
 
-// Todo: Change from Array to more precise format
 /**
  *
  * @param {PlainObject} cfg Config object
@@ -66,7 +79,7 @@ function importJSON ({
  * @param {string|Array} cfg.keyPath
  * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use; defaults to
  *   `window.indexedDB` or `global.indexedDB`
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function importCSVToIndexedDB (cfg) {
   const {csvFilePath, csvString, parserParameters} = cfg;
@@ -85,9 +98,10 @@ async function importCSVToIndexedDB (cfg) {
       ...parserParameters, output: 'csv'
     }).fromString(csvString);
 
-  return importJSON({...cfg, json});
+  return importJSONToIndexedDB({...cfg, json});
 }
 
 export {
+  importJSONToIndexedDB,
   importCSVToIndexedDB
 };
