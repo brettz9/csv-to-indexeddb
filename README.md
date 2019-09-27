@@ -8,4 +8,4 @@ IndexedDB.
 ## To-dos
 
 1. Complete basic functionality
-2. Test against IndexedDBShim using Mocha/Chai
+2. Add tests with full coverage
