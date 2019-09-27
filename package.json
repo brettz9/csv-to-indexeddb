@@ -7,7 +7,7 @@
   "scripts": {
     "eslint": "eslint --ext js,md,html .",
     "rollup": "rollup -c",
-    "nyc": "nyc --reporter=text npm test",
+    "nyc": "nyc --all --reporter=text -x=test -x=dist -x=.* npm test",
     "test": "mocha --reporter test/bootstrap/istanbul.reporter.js --require esm --require test/bootstrap/node test/*.test.js"
   },
   "repository": {
