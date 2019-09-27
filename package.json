@@ -1,7 +1,7 @@
 {
   "name": "csv-to-indexeddb",
   "version": "0.1.0",
-  "description": "Converts CSV or JSON to IndexedDB",
+  "description": "Converts CSV strings and files or JSON to IndexedDB",
   "main": "dist/csv-to-indexeddb.js",
   "module": "dist/csv-to-indexeddb-es.js",
   "scripts": {
