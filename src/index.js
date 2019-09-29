@@ -73,7 +73,6 @@ function importJSONToIndexedDB ({
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(dbName, dbVersion);
-    let transformed;
     req.addEventListener('upgradeneeded', (e) => {
       const db = e.target.result;
       if (upgradeneeded) {
@@ -98,14 +97,12 @@ function importJSONToIndexedDB ({
           return j;
         }, []);
       }
-      // Todo: If `format` is transformed from original,
-      //   set as `transformed` variable
+
       // Todo: Use any `fieldSchemas` to manipulate `json`;
       //  allow `null` to instead indicate omission
       store.put(json);
     });
     req.addEventListener('success', (e) => {
-      e.$transformed = transformed;
       resolve(e);
     });
     req.addEventListener('error', (e) => {
