@@ -29,6 +29,10 @@ import csv from 'csvtojson';
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
  * @property {IndexObject[]} [indexes=[]]
+ * @property {"csv"|"json"} [cfg.output="json"] When as an argument to
+ *   `importCSVToIndexedDB`, this takes priority over any `output`
+ *   on {@link external:csvToJSONParserParameters}
+ *   (`cfg.parserParameters`); if neither set, defaults to `"json"`
  * @property {JSONSchema} [fieldSchemas=[]] E.g.,
  *   `{type: 'string'}, {type: 'integer'}`
  *   Can omit or pass null to default to average type in column
@@ -58,6 +62,7 @@ function importJSONToIndexedDB ({
       : null,
   dbVersion = undefined,
   indexes = [],
+  output = 'json',
   // Can omit or pass null to default to average type in column
   fieldSchemas = [], // {type: 'string'}, {type: 'integer'}
   upgradeneeded = null
@@ -85,6 +90,7 @@ function importJSONToIndexedDB ({
         ? json.splice(0, 1)
         : fieldNames;
 
+      // Todo: Shape data based on whether `output` is `json` or `csv`
       if (Array.isArray(fNames)) {
         json = fNames.reduce((j, fName) => {
           // Todo: use `j` and `fName`
@@ -115,8 +121,11 @@ function importJSONToIndexedDB ({
 }
 
 /**
-* @external csvToJSONParserParameters
-* @see https://www.npmjs.com/package/csvtojson#user-content-parameters
+ * Of particular interest may be the `flatKeys` boolean property
+ * to give `{"a.b":1,"a.c":2}` rather than `{"a":{"b":1,"c":2}}`
+ * with columns `a.b,a.c` and data `1,2`
+ * @external csvToJSONParserParameters
+ * @see https://www.npmjs.com/package/csvtojson#user-content-parameters
 */
 
 /**
@@ -129,26 +138,40 @@ function importJSONToIndexedDB ({
  *   an `event` property set to `error` or `blocked`
  */
 async function importCSVToIndexedDB (cfg) {
-  const {csvFilePath, csvString, parserParameters} = cfg;
+  const {
+    csvFilePath, csvString, parserParameters, output: cfgOutput,
+    ...remainingCfg
+  } = cfg;
+  const {output: parserOutput} = parserParameters;
+  const output = cfgOutput || parserOutput;
+
   if (!csvFilePath && !csvString) {
     throw new TypeError('You must supply a `csvFilePath` or a `csvString`');
   }
 
   const json = csvFilePath
     ? await csv({
-      ...parserParameters, output: 'json'
+      ...parserParameters, output
     }).fromFile(csvFilePath)
     /**
+     * For "csv":
+     * [["1","2","3"], ["4","5","6"], ["7","8","9"]]
+     *
+     * For "json"
      * [
      *   {a:"1", b:"2", c:"3"},
      *   {a:"4", b:"5". c:"6"}
      * ]
+     *
+     * See also `flatKeys` for a subtype of `json`
      */
     : await csv({
-      ...parserParameters, output: 'csv'
+      ...parserParameters, output
     }).fromString(csvString);
 
-  return importJSONToIndexedDB({...cfg, json});
+  return importJSONToIndexedDB({
+    ...remainingCfg, json, output
+  });
 }
 
 export {
