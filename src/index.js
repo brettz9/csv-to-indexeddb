@@ -29,7 +29,7 @@ import csv from 'csvtojson';
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
  * @property {IndexObject[]} [indexes=[]]
- * @property {"csv"|"json"} [cfg.output="json"] When as an argument to
+ * @property {"csv"|"json"} [cfg.format="json"] When as an argument to
  *   `importCSVToIndexedDB`, this takes priority over any `output`
  *   on {@link external:csvToJSONParserParameters}
  *   (`cfg.parserParameters`); if neither set, defaults to `"json"`
@@ -62,7 +62,7 @@ function importJSONToIndexedDB ({
       : null,
   dbVersion = undefined,
   indexes = [],
-  output = 'json',
+  format = 'json',
   // Can omit or pass null to default to average type in column
   fieldSchemas = [], // {type: 'string'}, {type: 'integer'}
   upgradeneeded = null
@@ -91,14 +91,14 @@ function importJSONToIndexedDB ({
         ? json.splice(0, 1)
         : fieldNames;
 
-      // Todo: Shape data based on whether `output` is `json` or `csv`
+      // Todo: Shape data based on whether `format` is `json` or `csv`
       if (Array.isArray(fNames)) {
         json = fNames.reduce((j, fName) => {
           // Todo: use `j` and `fName`
           return j;
         }, []);
       }
-      // Todo: If output is transformed from original,
+      // Todo: If `format` is transformed from original,
       //   set as `transformed` variable
       // Todo: Use any `fieldSchemas` to manipulate `json`;
       //  allow `null` to instead indicate omission
@@ -156,11 +156,10 @@ function importJSONToIndexedDB ({
 async function importCSVToIndexedDB (cfg) {
   const {
     csvFilePath, csvString, parserParameters, alterJSON,
-    output: cfgOutput,
+    format: cfgFormat,
     ...remainingCfg
   } = cfg;
-  const {output: parserOutput} = parserParameters;
-  const output = cfgOutput || parserOutput;
+  const format = cfgFormat || parserParameters.output;
 
   if (!csvFilePath && !csvString) {
     throw new TypeError('You must supply a `csvFilePath` or a `csvString`');
@@ -168,7 +167,7 @@ async function importCSVToIndexedDB (cfg) {
 
   let json = csvFilePath
     ? await csv({
-      ...parserParameters, output
+      ...parserParameters, output: format
     }).fromFile(csvFilePath)
     /**
      * For "csv":
@@ -183,7 +182,7 @@ async function importCSVToIndexedDB (cfg) {
      * See also `flatKeys` for a subtype of `json`
      */
     : await csv({
-      ...parserParameters, output
+      ...parserParameters, output: format
     }).fromString(csvString);
 
   if (alterJSON) {
@@ -191,7 +190,7 @@ async function importCSVToIndexedDB (cfg) {
   }
 
   return importJSONToIndexedDB({
-    ...remainingCfg, json, output
+    ...remainingCfg, json, format
   });
 }
 
