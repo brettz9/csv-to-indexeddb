@@ -3,21 +3,25 @@
 
 import csv from 'csvtojson';
 
-// Todo: Add docs for other properties
 /**
- * @param {PlainObject} cfg
- * @param {JSON} cfg.json
- * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use;
+ * @typedef {PlainObject} JsonInfo
+ * @property {Array} fieldNames
+ * @property {string} dbName, // 'myDb'
+ * @property {string} storeName, // 'myRecords'
+ * @property {string|Array} keyPath
+ * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
- * @param {Array} cfg.fieldNames
- * @param {Array} [cfg.fieldSchemas=[]] E.g.,
+ * @property {Float} [dbVersion=undefined]
+ * @property {Array} [indexes=[]]
+ * @property {Array} [fieldSchemas=[]] E.g.,
  *   `{type: 'string'}, {type: 'integer'}`
  *   Can omit or pass null to default to average type in column
- * @param {string} cfg.dbName, // 'myDb'
- * @param {Float} [cfg.dbVersion=undefined]
- * @param {string} cfg.storeName, // 'myRecords'
- * @param {Array} [cfg.indexes=[]]
- * @param {string|Array} cfg.keyPath
+ */
+
+// Todo: Add docs for other properties
+/**
+ * @param {JsonInfo} cfg
+ * @param {JSON} cfg.json
  * @returns {Promise<void>}
 */
 function importJSONToIndexedDB ({
@@ -71,25 +75,17 @@ function importJSONToIndexedDB ({
 
 /**
  *
- * @param {PlainObject} cfg Config object
+ * @param {JsonInfo} cfg Config object
  * @param {string} [cfg.csvFilePath]
  * @param {string} [cfg.csvString]
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
- * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use;
- *   defaults to `window.indexedDB` or `global.indexedDB`
- * @param {Array} cfg.fieldNames
- * @param {Array} [cfg.fieldSchemas=[]] E.g.,
- *   `{type: 'string'}, {type: 'integer'}`
- *   Can omit or pass null to default to average type in column
- * @param {string} cfg.dbName, // 'myDb'
- * @param {Float} [cfg.dbVersion=undefined]
- * @param {string} cfg.storeName, // 'myRecords'
- * @param {Array} [cfg.indexes=[]]
- * @param {string|Array} cfg.keyPath
  * @returns {Promise<void>}
  */
 async function importCSVToIndexedDB (cfg) {
   const {csvFilePath, csvString, parserParameters} = cfg;
+  if (!csvFilePath && !csvString) {
+    throw new TypeError('You must supply a `csvFilePath` or a `csvString`');
+  }
 
   const json = csvFilePath
     ? await csv({
