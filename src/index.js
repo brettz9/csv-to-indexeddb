@@ -40,7 +40,8 @@ import csv from 'csvtojson';
 /**
  * @param {JsonInfo} cfg
  * @param {JSON} cfg.json
- * @returns {Promise<void>}
+ * @returns {Promise<Event>} A success event or rejects with `Error` with
+ *   an `event` property set to `error` or `blocked`
 */
 function importJSONToIndexedDB ({
   json,
@@ -124,7 +125,8 @@ function importJSONToIndexedDB ({
  * @param {string} [cfg.csvFilePath]
  * @param {string} [cfg.csvString]
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
- * @returns {Promise<void>}
+ * @returns {Promise<Event>} A success event or rejects with `Error` with
+ *   an `event` property set to `error` or `blocked`
  */
 async function importCSVToIndexedDB (cfg) {
   const {csvFilePath, csvString, parserParameters} = cfg;
