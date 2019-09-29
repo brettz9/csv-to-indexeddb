@@ -81,15 +81,16 @@ function importJSONToIndexedDB ({
       });
 
       const fNames = fieldNames === true
-        ? json[0]
+        ? json.splice(0, 1)
         : fieldNames;
 
       if (Array.isArray(fNames)) {
         json = fNames.reduce((j, fName) => {
+          // Todo: use `j` and `fName`
           return j;
-        }, json);
+        }, []);
       }
-      // Todo: Use `fieldSchemas` and `json` to populate data
+      // Todo: Use any `fieldSchemas` to manipulate `json`
       store.put(json);
     });
     req.addEventListener('success', (e) => {
