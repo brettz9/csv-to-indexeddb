@@ -137,6 +137,10 @@ function importJSONToIndexedDB ({
 * @callback AlterJSONCallback
 * @param {JSON} json The input JSON
 * @returns {JSON} The manipulated JSON
+* @todo We might benefit from having various pre-built callbacks (indicated by a
+*   string name) versions which convert _JSON_ CSV to other JSON CSV formats,
+*   e.g., from flat to non-flat or vice-versa or array to object or object to
+*   array (latter would lose numeric keys, however)
 */
 
 /**
