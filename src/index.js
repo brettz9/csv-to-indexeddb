@@ -5,10 +5,10 @@ import csv from 'csvtojson';
 
 /**
  * @typedef {PlainObject} JsonInfo
- * @property {Array} fieldNames
  * @property {string} dbName, // 'myDb'
  * @property {string} storeName, // 'myRecords'
  * @property {string|Array} keyPath
+ * @property {Array} fieldNames
  * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
@@ -24,6 +24,10 @@ import csv from 'csvtojson';
  * @returns {Promise<void>}
 */
 function importJSONToIndexedDB ({
+  dbName, // 'myDb'
+  storeName, // 'myRecords'
+  keyPath, // '', [], etc
+  fieldNames = [],
   // eslint-disable-next-line no-shadow
   indexedDB = typeof window !== 'undefined'
     ? window.indexedDB
@@ -31,14 +35,10 @@ function importJSONToIndexedDB ({
       ? global.indexedDB
       : null,
   json,
-  fieldNames = [],
-  // Can omit or pass null to default to average type in column
-  fieldSchemas = [], // {type: 'string'}, {type: 'integer'}
-  dbName, // 'myDb'
   dbVersion = undefined,
-  storeName, // 'myRecords'
   indexes = [],
-  keyPath // '', [], etc
+  // Can omit or pass null to default to average type in column
+  fieldSchemas = [] // {type: 'string'}, {type: 'integer'}
 } = {}) {
   if (!indexedDB) {
     throw new TypeError('A valid instance of `indexedDB` is required.');
