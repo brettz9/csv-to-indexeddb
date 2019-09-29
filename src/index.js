@@ -1,5 +1,5 @@
 /* eslint-disable jsdoc/check-types */
-// Todo: Remove this disabling
+// Todo: Remove this disabling and use more precise types
 
 import csv from 'csvtojson';
 
@@ -18,7 +18,6 @@ import csv from 'csvtojson';
  *   Can omit or pass null to default to average type in column
  */
 
-// Todo: Add docs for other properties
 /**
  * @param {JsonInfo} cfg
  * @param {JSON} cfg.json
