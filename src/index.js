@@ -34,7 +34,7 @@ function importJSONToIndexedDB ({
   storeName, // 'myRecords'
   indexes = [],
   keyPath // '', [], etc
-}) {
+} = {}) {
   if (!indexedDB) {
     throw new TypeError('A valid instance of `indexedDB` is required.');
   }

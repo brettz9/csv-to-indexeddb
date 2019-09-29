@@ -9,4 +9,7 @@ describe('Main tests', function () {
     expect(importJSONToIndexedDB).to.be.a('function');
     expect(indexedDB).to.be.an('IDBFactory');
   });
+  it('importJSONToIndexedDB', function () {
+    importJSONToIndexedDB();
+  });
 });
