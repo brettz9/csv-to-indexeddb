@@ -10,6 +10,16 @@ describe('Main tests', function () {
     expect(indexedDB).to.be.an('IDBFactory');
   });
   it('importJSONToIndexedDB', function () {
-    importJSONToIndexedDB();
+    importJSONToIndexedDB({
+      json: [],
+      fieldNames: [],
+      fieldSchemas: [
+        {type: 'string'}, {type: 'integer'}
+      ],
+      dbName: 'myDb',
+      storeName: 'myRecords',
+      indexes: [],
+      keyPath: ''
+    });
   });
 });

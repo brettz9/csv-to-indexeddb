@@ -6,16 +6,18 @@ import csv from 'csvtojson';
 // Todo: Add docs for other properties
 /**
  * @param {PlainObject} cfg
+ * @param {JSON} cfg.json
+ * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use;
+ *   defaults to `window.indexedDB` or `global.indexedDB`
  * @param {Array} cfg.fieldNames
  * @param {Array} [cfg.fieldSchemas=[]] E.g.,
  *   `{type: 'string'}, {type: 'integer'}`
  *   Can omit or pass null to default to average type in column
  * @param {string} cfg.dbName, // 'myDb'
+ * @param {Float} [cfg.dbVersion=undefined]
  * @param {string} cfg.storeName, // 'myRecords'
  * @param {Array} [cfg.indexes=[]]
  * @param {string|Array} cfg.keyPath
- * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use; defaults to
- *   `window.indexedDB` or `global.indexedDB`
  * @returns {Promise<void>}
 */
 function importJSONToIndexedDB ({
@@ -73,16 +75,17 @@ function importJSONToIndexedDB ({
  * @param {string} [cfg.csvFilePath]
  * @param {string} [cfg.csvString]
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
+ * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use;
+ *   defaults to `window.indexedDB` or `global.indexedDB`
  * @param {Array} cfg.fieldNames
  * @param {Array} [cfg.fieldSchemas=[]] E.g.,
  *   `{type: 'string'}, {type: 'integer'}`
  *   Can omit or pass null to default to average type in column
  * @param {string} cfg.dbName, // 'myDb'
+ * @param {Float} [cfg.dbVersion=undefined]
  * @param {string} cfg.storeName, // 'myRecords'
  * @param {Array} [cfg.indexes=[]]
  * @param {string|Array} cfg.keyPath
- * @param {IDBFactory} [cfg.indexedDB] Instance of indexedDB to use; defaults to
- *   `window.indexedDB` or `global.indexedDB`
  * @returns {Promise<void>}
  */
 async function importCSVToIndexedDB (cfg) {
