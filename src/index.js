@@ -1,21 +1,39 @@
-/* eslint-disable jsdoc/check-types */
-// Todo: Remove this disabling and use more precise types
-
 import csv from 'csvtojson';
+
+/**
+* @callback UpgradeneededCallback
+* @param {Event} e
+*/
+
+/**
+* @typedef {string|string[]} KeyPath
+*/
+
+/**
+* @typedef {PlainObject} IndexObject
+* @property {string} name
+* @property {KeyPath} keyPath
+* @property {boolean} [unique=false]
+* @property {boolean} [multiEntry=false]
+*/
 
 /**
  * @typedef {PlainObject} JsonInfo
  * @property {string} dbName, // 'myDb'
  * @property {string} storeName, // 'myRecords'
- * @property {string|Array} keyPath
- * @property {Array} fieldNames
+ * @property {KeyPath} keyPath
+ * @property {boolean} [autoIncrement=true]
+ * @property {string[]} [fieldNames=[]]
  * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
- * @property {Array} [indexes=[]]
- * @property {Array} [fieldSchemas=[]] E.g.,
+ * @property {IndexObject[]} [indexes=[]]
+ * @property {JSONSchema} [fieldSchemas=[]] E.g.,
  *   `{type: 'string'}, {type: 'integer'}`
  *   Can omit or pass null to default to average type in column
+ * @property {UpgradeneededCallback} upgradeneeded Use if you need to clean
+ *   up the old version of the database, e.g., to remote indexes. Runs before
+ *   the automated addition of indicated stores and indexes
  */
 
 /**
@@ -24,9 +42,11 @@ import csv from 'csvtojson';
  * @returns {Promise<void>}
 */
 function importJSONToIndexedDB ({
+  json,
   dbName, // 'myDb'
   storeName, // 'myRecords'
   keyPath, // '', [], etc
+  autoIncrement = true,
   fieldNames = [],
   // eslint-disable-next-line no-shadow
   indexedDB = typeof window !== 'undefined'
@@ -34,36 +54,50 @@ function importJSONToIndexedDB ({
     : typeof global !== 'undefined'
       ? global.indexedDB
       : null,
-  json,
   dbVersion = undefined,
   indexes = [],
   // Can omit or pass null to default to average type in column
-  fieldSchemas = [] // {type: 'string'}, {type: 'integer'}
+  fieldSchemas = [], // {type: 'string'}, {type: 'integer'}
+  upgradeneeded = null
 } = {}) {
   if (!indexedDB) {
     throw new TypeError('A valid instance of `indexedDB` is required.');
   }
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
-    /* eslint-disable promise/prefer-await-to-callbacks */
     const req = indexedDB.open(dbName, dbVersion);
-    req.addEventListener('upgradeneeded', () => {
-      // Todo
+    req.addEventListener('upgradeneeded', (e) => {
+      const db = e.target.result;
+      if (upgradeneeded) {
+        upgradeneeded(db, e);
+      }
+      db.createObjectStore(storeName, {
+        keyPath,
+        autoIncrement
+      });
+      indexes.forEach(({name, keyPath: kp, ...options}) => {
+        db.createIndex(name, kp, options);
+      });
 
+      // Todo: Use `fieldSchemas`, `fieldNames` and `json`
     });
-    req.addEventListener('success', () => {
-      // Todo
-
+    req.addEventListener('success', (e) => {
+      resolve(e);
     });
-    req.addEventListener('error', (err) => {
+    req.addEventListener('error', (e) => {
       // eslint-disable-next-line no-console
-      console.log('IndexedDB.open error', err);
+      console.log('IndexedDB.open error', e);
+      const err = new Error('error');
+      err.event = e;
+      reject(err);
     });
-    req.addEventListener('blocked', (err) => {
+    req.addEventListener('blocked', (e) => {
       // eslint-disable-next-line no-console
-      console.log('IndexedDB.open blocked', err);
+      console.log('IndexedDB.open blocked', e);
+      const err = new Error('error');
+      err.event = e;
+      reject(err);
     });
-    /* eslint-enable promise/prefer-await-to-callbacks */
   });
 }
 
