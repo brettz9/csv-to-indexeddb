@@ -86,6 +86,22 @@ function importJSONToIndexedDB ({
         db.createIndex(name, kp, options);
       });
 
+      /**
+       * For "csv":
+       * [["1","2","3"], ["4","5","6"], ["7","8","9"]]
+       *
+       * For "json"
+       * [
+       *   {a:"1", b:"2", c:"3"},
+       *   {a:"4", b:"5". c:"6"}
+       * ]
+       *
+       * `flatKeys` vs. plain:
+       * `a.b,a.c
+       *   1,2`
+       * `{"a.b":1,"a.c":2}` vs. `{"a":{"b":1,"c":2}}`
+       */
+
       const fNames = fieldNames === true
         ? json.splice(0, 1)
         : fieldNames;
@@ -164,21 +180,11 @@ async function importCSVToIndexedDB (cfg) {
   }
 
   let json = csvFilePath
+
     ? await csv({
       ...parserParameters, output: format
     }).fromFile(csvFilePath)
-    /**
-     * For "csv":
-     * [["1","2","3"], ["4","5","6"], ["7","8","9"]]
-     *
-     * For "json"
-     * [
-     *   {a:"1", b:"2", c:"3"},
-     *   {a:"4", b:"5". c:"6"}
-     * ]
-     *
-     * See also `flatKeys` for a subtype of `json`
-     */
+
     : await csv({
       ...parserParameters, output: format
     }).fromString(csvString);
