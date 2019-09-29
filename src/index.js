@@ -45,7 +45,7 @@ import csv from 'csvtojson';
  * @param {JsonInfo} cfg
  * @param {JSON} cfg.json
  * @returns {Promise<Event>} A success event or rejects with `Error` with
- *   an `event` property set to `error` or `blocked`
+ *   an `$event` property set to `error` or `blocked`
 */
 function importJSONToIndexedDB ({
   json,
@@ -73,6 +73,7 @@ function importJSONToIndexedDB ({
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(dbName, dbVersion);
+    let transformed;
     req.addEventListener('upgradeneeded', (e) => {
       const db = e.target.result;
       if (upgradeneeded) {
@@ -97,24 +98,27 @@ function importJSONToIndexedDB ({
           return j;
         }, []);
       }
+      // Todo: If output is transformed from original,
+      //   set as `transformed` variable
       // Todo: Use any `fieldSchemas` to manipulate `json`
       store.put(json);
     });
     req.addEventListener('success', (e) => {
+      e.$transformed = transformed;
       resolve(e);
     });
     req.addEventListener('error', (e) => {
       // eslint-disable-next-line no-console
       console.log('IndexedDB.open error', e);
       const err = new Error('error');
-      err.event = e;
+      err.$event = e;
       reject(err);
     });
     req.addEventListener('blocked', (e) => {
       // eslint-disable-next-line no-console
       console.log('IndexedDB.open blocked', e);
       const err = new Error('error');
-      err.event = e;
+      err.$event = e;
       reject(err);
     });
   });
@@ -135,7 +139,7 @@ function importJSONToIndexedDB ({
  * @param {string} [cfg.csvString]
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
  * @returns {Promise<Event>} A success event or rejects with `Error` with
- *   an `event` property set to `error` or `blocked`
+ *   an `$event` property set to `error` or `blocked`
  */
 async function importCSVToIndexedDB (cfg) {
   const {
