@@ -100,7 +100,8 @@ function importJSONToIndexedDB ({
       }
       // Todo: If output is transformed from original,
       //   set as `transformed` variable
-      // Todo: Use any `fieldSchemas` to manipulate `json`
+      // Todo: Use any `fieldSchemas` to manipulate `json`;
+      //  allow `null` to instead indicate omission
       store.put(json);
     });
     req.addEventListener('success', (e) => {
@@ -133,17 +134,25 @@ function importJSONToIndexedDB ({
 */
 
 /**
+* @callback AlterJSONCallback
+* @param {JSON} json The input JSON
+* @returns {JSON} The manipulated JSON
+*/
+
+/**
  *
  * @param {JsonInfo} cfg Config object
  * @param {string} [cfg.csvFilePath]
  * @param {string} [cfg.csvString]
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
+ * @param {AlterJSONCallback} [cfg.alterJSON]
  * @returns {Promise<Event>} A success event or rejects with `Error` with
  *   an `$event` property set to `error` or `blocked`
  */
 async function importCSVToIndexedDB (cfg) {
   const {
-    csvFilePath, csvString, parserParameters, output: cfgOutput,
+    csvFilePath, csvString, parserParameters, alterJSON,
+    output: cfgOutput,
     ...remainingCfg
   } = cfg;
   const {output: parserOutput} = parserParameters;
@@ -153,7 +162,7 @@ async function importCSVToIndexedDB (cfg) {
     throw new TypeError('You must supply a `csvFilePath` or a `csvString`');
   }
 
-  const json = csvFilePath
+  let json = csvFilePath
     ? await csv({
       ...parserParameters, output
     }).fromFile(csvFilePath)
@@ -172,6 +181,10 @@ async function importCSVToIndexedDB (cfg) {
     : await csv({
       ...parserParameters, output
     }).fromString(csvString);
+
+  if (alterJSON) {
+    json = alterJSON(json);
+  }
 
   return importJSONToIndexedDB({
     ...remainingCfg, json, output
