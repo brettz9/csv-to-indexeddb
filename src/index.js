@@ -137,7 +137,8 @@ function importJSONToIndexedDB ({
 * @todo We might benefit from having various pre-built callbacks (indicated by a
 *   string name) versions which convert _JSON_ CSV to other JSON CSV formats,
 *   e.g., from flat to non-flat or vice-versa or array to object or object to
-*   array (latter would lose numeric keys, however)
+*   array (latter would lose numeric keys, however); make sure they are public
+*   so can use before sending to `importJSONToIndexedDB` as well
 */
 
 /**
