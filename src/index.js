@@ -23,7 +23,8 @@ import csv from 'csvtojson';
  * @property {string} storeName, // 'myRecords'
  * @property {KeyPath} keyPath
  * @property {boolean} [autoIncrement=true]
- * @property {string[]} [fieldNames=[]]
+ * @property {string[]|boolean} [fieldNames=[]] If true, it will treat the
+ *   first row of `json` data as containing the field names
  * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
@@ -71,7 +72,7 @@ function importJSONToIndexedDB ({
       if (upgradeneeded) {
         upgradeneeded(db, e);
       }
-      db.createObjectStore(storeName, {
+      const store = db.createObjectStore(storeName, {
         keyPath,
         autoIncrement
       });
@@ -79,7 +80,17 @@ function importJSONToIndexedDB ({
         db.createIndex(name, kp, options);
       });
 
-      // Todo: Use `fieldSchemas`, `fieldNames` and `json`
+      const fNames = fieldNames === true
+        ? json[0]
+        : fieldNames;
+
+      if (Array.isArray(fNames)) {
+        json = fNames.reduce((j, fName) => {
+          return j;
+        }, json);
+      }
+      // Todo: Use `fieldSchemas` and `json` to populate data
+      store.put(json);
     });
     req.addEventListener('success', (e) => {
       resolve(e);

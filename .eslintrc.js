@@ -10,6 +10,7 @@ module.exports = {
   },
   settings: {
     polyfills: [
+      'Array.isArray',
       'console',
       'Error',
       'Promise'
