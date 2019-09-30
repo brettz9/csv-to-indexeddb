@@ -176,10 +176,11 @@ function importJSONToIndexedDB ({
 async function importCSVToIndexedDB (cfg) {
   const {
     csvFilePath, csvString, parserParameters, alterJSON,
-    format: cfgFormat,
+    format = parserParameters.output,
+    headers = parserParameters.headers,
+    noheader = parserParameters.noheader,
     ...remainingCfg
   } = cfg;
-  const format = cfgFormat || parserParameters.output;
 
   if (!csvFilePath && !csvString) {
     throw new TypeError('You must supply a `csvFilePath` or a `csvString`');
@@ -188,11 +189,11 @@ async function importCSVToIndexedDB (cfg) {
   let json = csvFilePath
 
     ? await csv({
-      ...parserParameters, output: format
+      ...parserParameters, output: format, headers, noheader
     }).fromFile(csvFilePath)
 
     : await csv({
-      ...parserParameters, output: format
+      ...parserParameters, output: format, headers, noheader
     }).fromString(csvString);
 
   if (alterJSON) {
