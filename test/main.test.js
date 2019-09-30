@@ -8,7 +8,7 @@
 
 describe('Main tests', function () {
   beforeEach(() => {
-    indexedDB.deleteDatabase('testDb');
+    cleanupDatabases();
   });
   after(() => {
     cleanupDatabases();
