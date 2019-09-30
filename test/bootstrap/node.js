@@ -13,3 +13,7 @@ global.importCSVToIndexedDB = importCSVToIndexedDB;
 global.importJSONToIndexedDB = importJSONToIndexedDB;
 
 global.expect = expect;
+
+// Needed by IndexedDB
+global.location = {origin: 'http://localhost:8010'};
+setGlobalVars();

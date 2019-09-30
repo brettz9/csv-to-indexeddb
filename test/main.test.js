@@ -1,4 +1,4 @@
-/* globals indexedDB, setGlobalVars,
+/* globals indexedDB,
   importCSVToIndexedDB, importJSONToIndexedDB,
   getSuccess, cleanupDatabases */
 
@@ -8,8 +8,6 @@
 
 describe('Main tests', function () {
   beforeEach(() => {
-    global.location = {origin: 'example.com'};
-    setGlobalVars();
     indexedDB.deleteDatabase('testDb');
   });
   after(() => {
