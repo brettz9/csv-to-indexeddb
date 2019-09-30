@@ -31,9 +31,6 @@ import csv from 'csvtojson';
  *   `importCSVToIndexedDB`, this takes priority over any `output`
  *   on {@link external:csvToJSONParserParameters}
  *   (`cfg.parserParameters`); if neither set, defaults to `"json"`
- * @property {JSONSchema} [fieldSchemas=[]] E.g.,
- *   `{type: 'string'}, {type: 'integer'}`
- *   Can omit or pass null to default to average type in column
  * @property {UpgradeneededCallback} upgradeneeded Use if you need to clean
  *   up the old version of the database, e.g., to remote indexes. Runs before
  *   the automated addition of indicated stores and indexes
@@ -60,8 +57,6 @@ function importJSONToIndexedDB ({
   dbVersion = undefined,
   indexes = [],
   format = 'json',
-  // Can omit or pass null to default to average type in column
-  fieldSchemas = [], // {type: 'string'}, {type: 'integer'}
   upgradeneeded = null
 } = {}) {
   if (!indexedDB) {
@@ -98,9 +93,6 @@ function importJSONToIndexedDB ({
        *   1,2`
        * `{"a.b":1,"a.c":2}` vs. `{"a":{"b":1,"c":2}}`
        */
-
-      // Todo: Use any `fieldSchemas` to manipulate `json`;
-      //  allow `null` to instead indicate omission
       store.put(json);
     });
     req.addEventListener('success', (e) => {
@@ -140,7 +132,8 @@ function importJSONToIndexedDB ({
 *   e.g., from flat to non-flat or vice-versa or array to object or object to
 *   array (latter would lose numeric keys, however); also, allow callbacks like
 *   csvtojson' [`colParser`]{@link https://www.npmjs.com/package/csvtojson#column-parser}
-*   to manipulate _JSON_ CSV; make sure these proposed callbacks are public
+*   to manipulate _JSON_ CSV (might accept JSON Schema like `{type: 'string'}`
+*   to indicate conversions); make sure these proposed callbacks are public
 *   exports (possibly in its own library) so one can use before sending to
 *   `importJSONToIndexedDB` as well
 */
