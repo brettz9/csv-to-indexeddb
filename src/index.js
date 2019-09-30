@@ -162,6 +162,12 @@ function importJSONToIndexedDB ({
  * @param {JsonInfo} cfg Config object
  * @param {string} [cfg.csvFilePath]
  * @param {string} [cfg.csvString]
+ * @param {string[]} [cfg.headers] Convenience for
+ *   [`cfg.parserParameters.headers`]{@link https://www.npmjs.com/package/csvtojson#header-row}
+ *   (this takes precedence); has no effect with "csv" format (i.e., array)
+ * @param {boolean} [cfg.noheader=false] Convenience for
+ *   [`cfg.parserParameters.noheader`]{@link https://www.npmjs.com/package/csvtojson#header-row}
+ *   (this takes precedence)
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
  * @param {AlterJSONCallback} [cfg.alterJSON]
  * @returns {Promise<Event>} A success event or rejects with `Error` with
