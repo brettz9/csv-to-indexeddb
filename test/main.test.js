@@ -8,18 +8,20 @@
 
 describe('Main tests', function () {
   beforeEach(() => {
+    global.location = {origin: 'example.com'};
     setGlobalVars();
     indexedDB.deleteDatabase('testDb');
   });
   after(() => {
     cleanupDatabases();
   });
+
   it('API', function () {
     expect(importCSVToIndexedDB).to.be.a('function');
     expect(importJSONToIndexedDB).to.be.a('function');
     expect(indexedDB).to.be.an('IDBFactory');
   });
-  global.location = {origin: 'example.com'};
+
   it('importJSONToIndexedDB', async function () {
     const {target: {result: db}} = await importJSONToIndexedDB({
       json: [
