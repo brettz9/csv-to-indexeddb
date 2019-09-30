@@ -10,6 +10,7 @@
     "start": "static -p 8010",
     "open": "open http://localhost:8010/coverage/lcov-report/src/index.js.html",
     "coverage": "npm test && run-p start open",
+    "cov": "npm run coverage",
     "nyc": "nyc --all --reporter=text -x=test -x=dist -x=node_modules -x=.* npm test",
     "test": "mocha --reporter test/bootstrap/istanbul.reporter.js --require test/bootstrap/node test/*.test.js"
   },
