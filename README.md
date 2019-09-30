@@ -3,15 +3,16 @@
 Simple utility to convert from CSV files, strings, or (tabular) JSON to
 IndexedDB.
 
-**This project is not yet complete.**
+**This project is not yet well-tested.**
 
 ## To-dos
 
-1. Complete basic functionality
+1. Add tests with full coverage
+2. Tag/publish
 
 ## Possible to-dos
 
-1. Add tests with full coverage
+1. Add Mocha browser test (especially important for confirming IndexedDB)
 1. For `cfg.alterJSON` of `importCSVToIndexedDB` (the
   `AlterJSONCallback` jsdoc type), we might benefit from having various
   pre-built callbacks (indicated by a string name) versions which convert

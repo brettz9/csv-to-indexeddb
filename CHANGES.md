@@ -1,5 +1,5 @@
 # CHANGES for csv-to-indexeddb
 
-## 0.1.0
+## 0.0.1
 
-- ?
+- Initial release

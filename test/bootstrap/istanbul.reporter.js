@@ -1,6 +1,4 @@
 // Courtesy of https://github.com/artberri/rollup-plugin-istanbul/issues/11
-/* globals require, module */
-/* eslint-disable import/unambiguous, import/no-commonjs */
 
 const instanbul = require('istanbul');
 const MochaSpecReporter = require('mocha/lib/reporters/spec');

@@ -13,6 +13,7 @@ module.exports = {
       'Array.isArray',
       'console',
       'Error',
+      'location.origin',
       'Promise'
     ]
   },
@@ -47,7 +48,11 @@ module.exports = {
     {
       files: ["test/**"],
       globals: {
-        "expect": true
+        "expect": true,
+        "require": true,
+        "module": true,
+        "exports": true,
+        "__dirname": true
       },
       plugins: [
         "chai-friendly",
@@ -58,6 +63,10 @@ module.exports = {
       },
       rules: {
         "no-console": ["off"],
+        "import/unambiguous": "off",
+        "import/no-commonjs": "off",
+        "jsdoc/require-jsdoc": "off",
+        "node/exports-style": "off",
         "chai-expect/no-inner-compare": 2,
         "chai-expect/missing-assertion": 2,
         "chai-expect/terminating-properties": 2,
