@@ -30,7 +30,7 @@ describe('Main tests', function () {
       storeName: 'myRecords',
       keyPath: 'b'
     });
-    expect(db).to.be.a('IDBDatabase');
+    expect(db).to.be.an('IDBDatabase');
 
     const tx = db.transaction('myRecords', 'readonly');
     const store = tx.objectStore('myRecords');
