@@ -93,7 +93,9 @@ function importJSONToIndexedDB ({
        *   1,2`
        * `{"a.b":1,"a.c":2}` vs. `{"a":{"b":1,"c":2}}`
        */
-      store.put(json);
+      json.forEach((j) => {
+        store.put(j);
+      });
     });
     req.addEventListener('success', (e) => {
       resolve(e);
@@ -116,9 +118,14 @@ function importJSONToIndexedDB ({
 }
 
 /**
- * Of particular interest may be the `flatKeys` boolean property
- * to give `{"a.b":1,"a.c":2}` rather than `{"a":{"b":1,"c":2}}`
- * with columns `a.b,a.c` and data `1,2`
+ * While the `flatKeys` boolean property might otherwise seem to
+ * be of interest, it is [not](https://w3c.github.io/IndexedDB/#key-path-construct)
+ * [currently](https://github.com/w3c/IndexedDB/issues/209#issuecomment-536361712)
+ * allowed as part of a keypath to give `{"a.b":1,"a.c":2}` rather than
+ * `{"a":{"b":1,"c":2}}` with columns `a.b,a.c` and data `1,2`, and
+ * use of periods in a keypath conveniently targets the nested
+ * structure anyways, so it is most likely best to leave this with the
+ * default of `false`.
  * @external csvToJSONParserParameters
  * @see https://www.npmjs.com/package/csvtojson#user-content-parameters
 */
@@ -127,15 +134,6 @@ function importJSONToIndexedDB ({
 * @callback AlterJSONCallback
 * @param {JSON} json The input JSON
 * @returns {JSON} The manipulated JSON
-* @todo We might benefit from having various pre-built callbacks (indicated by a
-*   string name) versions which convert _JSON_ CSV to other JSON CSV formats,
-*   e.g., from flat to non-flat or vice-versa or array to object or object to
-*   array (latter would lose numeric keys, however); also, allow callbacks like
-*   csvtojson' [`colParser`]{@link https://www.npmjs.com/package/csvtojson#column-parser}
-*   to manipulate _JSON_ CSV (might accept JSON Schema like `{type: 'string'}`
-*   to indicate conversions); make sure these proposed callbacks are public
-*   exports (possibly in its own library) so one can use before sending to
-*   `importJSONToIndexedDB` as well
 */
 
 /**
