@@ -131,9 +131,17 @@ function importJSONToIndexedDB ({
 */
 
 /**
-* @callback AlterJSONCallback
-* @param {JSON} json The input JSON
-* @returns {JSON} The manipulated JSON
+ * Instead of this callback, you may wish to alter the JSON as it is built
+ * through [`cfg.parserParameters.colParser`]{@link https://github.com/Keyang/node-csvtojson#column-parser}.
+ * Either may be necessary, particularly to get an array in the data, e.g., for
+ * `multiEntry`-index-targeted properties (in which case a
+ * [custom parser function]{@link https://github.com/Keyang/node-csvtojson#custom-parsers-function})
+ * (or equivalent `AlterJSONCallback` transformation) would be needed. Note
+ * that this callback operates on the whole array of JSON objects rather
+ * than on just a single JSON object/CSV-JSON row.
+ * @callback AlterJSONCallback
+ * @param {JSON} json The input JSON
+ * @returns {JSON} The manipulated JSON
 */
 
 /**
