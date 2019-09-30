@@ -23,8 +23,6 @@ import csv from 'csvtojson';
  * @property {string} storeName, // 'myRecords'
  * @property {KeyPath} keyPath
  * @property {boolean} [autoIncrement=true]
- * @property {string[]|boolean} [fieldNames=[]] If true, it will treat the
- *   first row of `json` data as containing the field names
  * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
@@ -53,7 +51,6 @@ function importJSONToIndexedDB ({
   storeName, // 'myRecords'
   keyPath, // '', [], etc
   autoIncrement = true,
-  fieldNames = [],
   // eslint-disable-next-line no-shadow
   indexedDB = typeof window !== 'undefined'
     ? window.indexedDB
@@ -102,18 +99,6 @@ function importJSONToIndexedDB ({
        * `{"a.b":1,"a.c":2}` vs. `{"a":{"b":1,"c":2}}`
        */
 
-      const fNames = fieldNames === true
-        ? json.splice(0, 1)
-        : fieldNames;
-
-      // Todo: Shape data based on whether `format` is `json` or `csv`
-      if (Array.isArray(fNames)) {
-        json = fNames.reduce((j, fName) => {
-          // Todo: use `j` and `fName`
-          return j;
-        }, []);
-      }
-
       // Todo: Use any `fieldSchemas` to manipulate `json`;
       //  allow `null` to instead indicate omission
       store.put(json);
@@ -153,8 +138,11 @@ function importJSONToIndexedDB ({
 * @todo We might benefit from having various pre-built callbacks (indicated by a
 *   string name) versions which convert _JSON_ CSV to other JSON CSV formats,
 *   e.g., from flat to non-flat or vice-versa or array to object or object to
-*   array (latter would lose numeric keys, however); make sure they are public
-*   so can use before sending to `importJSONToIndexedDB` as well
+*   array (latter would lose numeric keys, however); also, allow callbacks like
+*   csvtojson' [`colParser`]{@link https://www.npmjs.com/package/csvtojson#column-parser}
+*   to manipulate _JSON_ CSV; make sure these proposed callbacks are public
+*   exports (possibly in its own library) so one can use before sending to
+*   `importJSONToIndexedDB` as well
 */
 
 /**
