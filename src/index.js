@@ -64,8 +64,11 @@ function importJSONToIndexedDB ({
   }
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
+    console.log('111a');
     const req = indexedDB.open(dbName, dbVersion);
+    console.log('1112b');
     req.addEventListener('upgradeneeded', (e) => {
+      console.log('1113c');
       const db = e.target.result;
       if (upgradeneeded) {
         upgradeneeded(db, e);
@@ -98,6 +101,7 @@ function importJSONToIndexedDB ({
       });
     });
     req.addEventListener('success', (e) => {
+      console.log('1114');
       resolve(e);
     });
     req.addEventListener('error', (e) => {

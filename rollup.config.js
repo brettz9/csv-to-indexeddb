@@ -24,19 +24,20 @@ export default [{
     resolve(),
     commonjs()
   ]
-}, {
-  input: 'src/index.js',
-  output: {
-    file: 'dist/csv-to-indexeddb-es.js',
-    format: 'es',
-    name: 'csvToIndexeddb',
-    exports: 'named'
-  },
-  plugins: [
-    istanbul({
-      exclude: ['test/**/*.js', 'dist/**']
-    }),
-    resolve(),
-    commonjs()
-  ]
-}];
+}]; // , {
+//   input: 'src/index.js',
+//   output: {
+//     file: 'dist/csv-to-indexeddb-es.js',
+//     format: 'es',
+//     name: 'csvToIndexeddb',
+//     exports: 'named'
+//   },
+//   plugins: [
+//     istanbul({
+//       exclude: ['test/**/*.js', 'dist/**']
+//     }),
+//     resolve(),
+//     commonjs()
+//   ]
+// }
+// ];

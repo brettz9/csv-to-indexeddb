@@ -19,10 +19,15 @@ describe('Main tests', function () {
     beforeEach(() => {
       // eslint-disable-next-line promise/avoid-new
       return new Promise((resolve, reject) => {
+        indexedDB.deleteDatabase('testDb2');
         const req = indexedDB.deleteDatabase('testDb');
         req.addEventListener('success', () => {
           cleanupDatabases();
           resolve();
+        });
+        req.addEventListener('error', () => {
+          console.log('Test');
+          reject(new Error('Error deleting database'));
         });
       });
     });
@@ -49,37 +54,6 @@ describe('Main tests', function () {
       await getSuccess(req, (result) => {
         expect(result).to.deep.equal({
           a: '4', b: '5', c: '6'
-        });
-      });
-    });
-
-    it('importJSONToIndexedDB (with indexes)', async function () {
-      const {target: {result: db}} = await importJSONToIndexedDB({
-        json: [
-          {a: '1', b: '2', c: '3'},
-          {a: '4', b: '5', c: '6'}
-        ],
-        dbName: 'testDb',
-        storeName: 'myRecords',
-        keyPath: 'b',
-        indexes: [
-          {
-            name: 'letterA',
-            keyPath: 'a'
-          }
-        ]
-      });
-      expect(db).to.be.an('IDBDatabase');
-
-      const tx = db.transaction('myRecords', 'readonly');
-      const store = tx.objectStore('myRecords');
-      const index = store.index('letterA');
-
-      const req = index.get('1');
-
-      await getSuccess(req, (result) => {
-        expect(result).to.deep.equal({
-          a: '1', b: '2', c: '3'
         });
       });
     });
