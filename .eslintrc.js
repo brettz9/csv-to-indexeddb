@@ -54,9 +54,9 @@ module.exports = {
         "exports": true,
         "__dirname": true
       },
-      plugins: [
-        "chai-friendly",
-        "chai-expect"
+      extends: [
+        'plugin:chai-expect/recommended',
+        'plugin:chai-friendly/recommended'
       ],
       env: {
         "mocha": true
@@ -66,13 +66,7 @@ module.exports = {
         "import/unambiguous": "off",
         "import/no-commonjs": "off",
         "jsdoc/require-jsdoc": "off",
-        "node/exports-style": "off",
-        "chai-expect/no-inner-compare": 2,
-        "chai-expect/missing-assertion": 2,
-        "chai-expect/terminating-properties": 2,
-        // For eslint-plugin-chai-friendly
-        "no-unused-expressions": 0,
-        "chai-friendly/no-unused-expressions": 2
+        "node/exports-style": "off"
       }
     }
   ],
