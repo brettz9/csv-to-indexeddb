@@ -3,6 +3,7 @@ import csv from 'csvtojson';
 /**
 * @callback UpgradeneededCallback
 * @param {Event} e
+* @returns {void}
 */
 
 /**
@@ -19,15 +20,15 @@ import csv from 'csvtojson';
 
 /**
  * @typedef {PlainObject} JsonInfo
- * @property {string} dbName, // 'myDb'
- * @property {string} storeName, // 'myRecords'
+ * @property {string} dbName
+ * @property {string} storeName
  * @property {KeyPath} keyPath
  * @property {boolean} [autoIncrement=true]
  * @property {IDBFactory} [indexedDB] Instance of indexedDB to use;
  *   defaults to `window.indexedDB` or `global.indexedDB`
  * @property {Float} [dbVersion=undefined]
  * @property {IndexObject[]} [indexes=[]]
- * @property {"csv"|"json"} [cfg.format="json"] When as an argument to
+ * @property {"csv"|"json"} [format="json"] When as an argument to
  *   `importCSVToIndexedDB`, this takes priority over any `output`
  *   on {@link external:csvToJSONParserParameters}
  *   (`cfg.parserParameters`); if neither set, defaults to `"json"`
@@ -39,6 +40,7 @@ import csv from 'csvtojson';
 /**
  * @param {JsonInfo} cfg
  * @param {JSON} cfg.json
+ * @throws {TypeError}
  * @returns {Promise<Event>} A success event or rejects with `Error` with
  *   an `$event` property set to `error` or `blocked`
 */
@@ -157,6 +159,7 @@ function importJSONToIndexedDB ({
  *   (this takes precedence)
  * @param {external:csvToJSONParserParameters} [cfg.parserParameters]
  * @param {AlterJSONCallback} [cfg.alterJSON]
+ * @throws {TypeError}
  * @returns {Promise<Event>} A success event or rejects with `Error` with
  *   an `$event` property set to `error` or `blocked`
  */

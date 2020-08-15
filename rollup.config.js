@@ -1,5 +1,5 @@
 import resolve from '@rollup/plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
 import istanbul from 'rollup-plugin-istanbul';
 
 /**

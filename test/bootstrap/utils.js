@@ -11,7 +11,7 @@ exports.getSuccess = function getSuccess (req, cb) {
   return new Promise((resolve, reject) => {
     req.addEventListener('success', ({target: {result}}) => {
       // eslint-disable-next-line max-len
-      // eslint-disable-next-line callback-return, promise/prefer-await-to-callbacks
+      // eslint-disable-next-line node/callback-return, promise/prefer-await-to-callbacks
       cb(result);
       resolve();
     });
